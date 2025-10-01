@@ -1,0 +1,24 @@
+name: Clone Repo
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo_url:
+        description: "GitHub repository URL to clone"
+        required: true
+        type: string
+
+jobs:
+  clone:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout Bot Repo
+      - name: Checkout Bot Repo
+        uses: actions/checkout@v4
+
+      # Step 2: Run Bash clone script
+      - name: Run Clone Script
+        run: ./scripts/clone_repo.sh
+        env:
+          REPO_URL: ${{ github.event.inputs.repo_url }}
