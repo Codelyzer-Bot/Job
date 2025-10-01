@@ -1,0 +1,37 @@
+name: Analyze
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo_url:
+        description: "GitHub repository URL to analyze"
+        required: true
+        type: string
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout Bot Repo
+      - name: Checkout Bot Repo
+        uses: actions/checkout@v4
+
+      # Step 2: Clone Target Repo
+      - name: Clone Target Repo
+        run: ./scripts/clone_repo.sh
+        env:
+          REPO_URL: ${{ github.event.inputs.repo_url }}
+
+      # Step 3: Run Checkstyle in Docker
+      - name: Run Checkstyle
+        run: ./scripts/run_analysis.sh
+        env:
+          REPO_URL: ${{ github.event.inputs.repo_url }}
+
+      # Step 4: Upload report as artifact
+      - name: Upload Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: checkstyle-report
+          path: report_*.json
