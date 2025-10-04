@@ -34,4 +34,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: checkstyle-report
-          path: ./temp_reports/report_*.xml
+          path: ./temp_reports/report_*.json
